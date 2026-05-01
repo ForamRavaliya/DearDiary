@@ -44,25 +44,31 @@ export default function Trash() {
   }, []);
 
   return (
-    <div className="trash-page">
-      <div className="trash-header">
-        <button onClick={() => navigate("/dashboard")}>← Dashboard</button>
+    <div className="page-container trash-theme">
+
+      <div className="page-header">
+        <button className="back-btn" onClick={() => navigate("/dashboard")}>
+          ← Dashboard
+        </button>
         <h1>🗑 Trash</h1>
       </div>
 
       {trashDiaries.length === 0 ? (
-        <div className="empty-trash">
+        <div className="empty-state">
+          <div className="empty-icon">🗑✨</div>
           <h2>Trash is empty</h2>
-          <p>No deleted diary pages found.</p>
+          <p>Your deleted pages will appear here.</p>
+
+          <button className="primary-btn">Go Back to Dashboard</button>
         </div>
       ) : (
-        <div className="trash-grid">
+        <div className="page-grid">
           {trashDiaries.map((d) => (
-            <div className="trash-card" key={d.id}>
+            <div className="card" key={d.id}>
               <h3>{d.title}</h3>
               <p>Mood: {d.mood || "Not added"}</p>
 
-              <div className="trash-actions">
+              <div className="card-actions-row">
                 <button onClick={() => restoreDiary(d.id)}>Restore</button>
                 <button onClick={() => permanentDelete(d.id)}>
                   Delete Forever

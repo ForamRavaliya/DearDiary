@@ -25,7 +25,7 @@ export default function MoodAnalytics() {
   );
 
   return (
-    <div className="mood-page">
+    <div className="page-container analytics-theme">
       <div className="mood-header">
         <button onClick={() => navigate("/dashboard")}>← Dashboard</button>
         <h1>📊 Mood Analytics</h1>

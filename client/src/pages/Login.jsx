@@ -43,44 +43,59 @@ useEffect(() => {
   }
 }, []);
 return (
-  <div className="auth-container">
+  <div className="auth-page premium-auth">
     <motion.div
-      className="auth-card"
-      initial={{ opacity: 0, y: 50 }}
+      className="premium-auth-card"
+      initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="auth-left">
-        <div className="logo-text">Dear Diary</div>
-        <h2>Log In</h2>
+      <div className="auth-form-side">
+        <div className="auth-logo">📔 Dear Diary</div>
+
+        <h1>Welcome Back</h1>
+        <p className="auth-subtitle">
+          Open your private diary and continue writing your secret memories.
+        </p>
 
         <form onSubmit={handleSubmit}>
+          <label>Username</label>
           <input
             type="text"
             name="username"
-            placeholder="Username"
+            placeholder="Enter your username"
             onChange={handleChange}
           />
 
+          <label>Password</label>
           <input
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder="Enter your password"
             onChange={handleChange}
           />
 
-          <button type="submit">Login</button>
+          <button type="submit" className="auth-main-btn">
+            Unlock Diary
+          </button>
         </form>
 
-        <p onClick={() => navigate("/register")}>
-          Don&apos;t have an account? Register
+        <p className="auth-switch" onClick={() => navigate("/register")}>
+          New here? Create your diary account
         </p>
       </div>
 
-      <div className="auth-right">
-        <span className="auth-bubble bubble-1"></span>
-        <span className="auth-bubble bubble-2"></span>
-        <div className="illustration">📔🌵</div>
+      <div className="auth-doodle-side">
+        <div className="doodle-card">
+          <span className="doodle-main">🔐📖</span>
+          <h2>Keep it secret</h2>
+          <p>Your thoughts, moods, and memories stay safe with you.</p>
+        </div>
+
+        <span className="floating-doodle d1">✨</span>
+        <span className="floating-doodle d2">🖊️</span>
+        <span className="floating-doodle d3">🌙</span>
+        <span className="floating-doodle d4">🎀</span>
       </div>
     </motion.div>
   </div>

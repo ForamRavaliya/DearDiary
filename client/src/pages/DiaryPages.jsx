@@ -20,7 +20,7 @@ export default function DiaryPages() {
   }, []);
 
   return (
-    <div className="all-pages-screen">
+    <div className="page-container diary-pages-theme">
       <div className="all-pages-header">
         <button onClick={() => navigate("/dashboard")}>← Dashboard</button>
         <h1>📄 All Diary Pages</h1>

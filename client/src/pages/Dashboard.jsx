@@ -116,7 +116,9 @@ const user = JSON.parse(localStorage.getItem("diaryUser"));
           <div className="brand-icon">📔</div>
           <div>
             <h2>Dear Diary</h2>
-            <h2>Hello, {user?.username || "User"}</h2>
+           <h2 className="greeting">
+               <span className="user-name">Hello, {user?.username || "User"}</span>
+           </h2>
             <p>Your private diary pages</p>
           </div>
         </div>
@@ -125,6 +127,7 @@ const user = JSON.parse(localStorage.getItem("diaryUser"));
           <button className="active">🏠 Dashboard</button>
           <button onClick={() => navigate("/calendar")}>📅 Calendar</button>
           <button onClick={() => navigate("/moods")}>📊 Mood Analytics</button>
+          <button onClick={() => navigate("/mood-explore")}>💭 Mood Explore</button>
           <button onClick={() => navigate("/pages")}>📄 Diary Pages</button>
          <button onClick={() => navigate("/favorites")}>⭐ Favorites</button>
           <button onClick={() => navigate("/locked")}>🔐 Locked Pages</button>
@@ -210,12 +213,17 @@ const user = JSON.parse(localStorage.getItem("diaryUser"));
     value={filterMood}
     onChange={(e) => setFilterMood(e.target.value)}
   >
-    <option value="">All Moods</option>
     <option value="Happy">Happy</option>
     <option value="Sad">Sad</option>
     <option value="Calm">Calm</option>
     <option value="Angry">Angry</option>
-    <option value="Excited">Excited</option>
+    <option value="Joy">Joy</option>
+    <option value="Amazing">Amazing</option>
+    <option value="Loved">Loved</option>
+    <option value="Tired">Tired</option>
+    <option value="Stressed">Stressed</option>
+    <option value="Neutral">Neutral</option>
+    <option value="Not Feeling Anything">Not Feeling Anything</option>
   </select>
 
   <button

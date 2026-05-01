@@ -20,7 +20,7 @@ export default function Favorites() {
   }, []);
 
   return (
-    <div className="favorites-page">
+   <div className="page-container favorites-theme">
       <div className="favorites-header">
         <button onClick={() => navigate("/dashboard")}>← Dashboard</button>
         <h1>⭐ Favorite Diary Pages</h1>

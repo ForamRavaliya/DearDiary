@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import API from "../api/api";
 
+import React, { useState, useEffect } from "react";
+import API from "../api/api";
+import { useLocation } from "react-router-dom";
 export default function DiaryForm({ onClose, refresh }) {
   const [form, setForm] = useState({
     title: "",
@@ -10,33 +11,42 @@ export default function DiaryForm({ onClose, refresh }) {
     template: "classic",
     is_locked: false,
     entry_password: "",
+    signature: "",
   });
 
-  const getCurrentDateTime = () => {
-    const now = new Date();
+  const now = new Date();
 
-    return {
-      day: now.toLocaleDateString("en-IN", { weekday: "long" }),
-      date: now.toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }),
-      time: now.toLocaleTimeString("en-IN", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
-  };
-
-  const { day, date, time } = getCurrentDateTime();
+  const day = now.toLocaleDateString("en-IN", { weekday: "long" });
+  const date = now.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+  const time = now.toLocaleTimeString("en-IN", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   const templates = [
-    { id: "classic", name: "Classic Paper", emoji: "📜" },
-    { id: "pink", name: "Pink Dream", emoji: "🌸" },
+    { id: "classic", name: "Classic", emoji: "📜" },
+    { id: "pink", name: "Pink Bow", emoji: "🎀" },
     { id: "night", name: "Secret Night", emoji: "🌙" },
     { id: "nature", name: "Nature Calm", emoji: "🍃" },
   ];
+
+const moods = [
+  { value: "Happy", label: "😊 Happy" },
+  { value: "Sad", label: "😢 Sad" },
+  { value: "Calm", label: "😌 Calm" },
+  { value: "Angry", label: "😡 Angry" },
+  { value: "Joy", label: "🥳 Joy" },
+  { value: "Amazing", label: "🤩 Amazing" },
+  { value: "Loved", label: "😍 Loved" },
+  { value: "Tired", label: "😴 Tired" },
+  { value: "Stressed", label: "😰 Stressed" },
+  { value: "Neutral", label: "😐 Neutral" },
+  { value: "Not Feeling Anything", label: "🫥 Not Feeling Anything" },
+];
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -45,10 +55,6 @@ export default function DiaryForm({ onClose, refresh }) {
       ...form,
       [name]: type === "checkbox" ? checked : value,
     });
-  };
-
-  const handleTemplateSelect = (templateId) => {
-    setForm({ ...form, template: templateId });
   };
 
   const handleSubmit = async (e) => {
@@ -63,76 +69,100 @@ export default function DiaryForm({ onClose, refresh }) {
       alert(err.response?.data?.message || "Error creating diary");
     }
   };
+const location = useLocation();
+
+useEffect(() => {
+  const params = new URLSearchParams(location.search);
+  const moodFromUrl = params.get("mood");
+
+  if (moodFromUrl && moods.some(m => m.value === moodFromUrl)) {
+    setForm((prev) => ({ ...prev, mood: moodFromUrl }));
+  }
+}, [location.search]);
 
   return (
     <div className="modal">
-      <div className={`diary-editor diary-template-${form.template}`}>
+      <div className={`diary-editor upgraded-diary diary-template-${form.template}`}>
+        <button type="button" className="close-btn" onClick={onClose}>
+          ✕
+        </button>
 
+        <div className="diary-date-note">
+          <span>{day}</span>
+          <strong>{date}</strong>
+          <small>{time}</small>
+        </div>
 
-        <div className="diary-top">
-          <div className="date-display">
-            <span>{day}</span>
-            <strong>{date}</strong>
-            <small>{time}</small>
-          </div>
-
-          <p className="diary-label">My Secret Diary</p>
+        <div className="diary-heading">
+          <p>My Secret Diary</p>
           <h2>Write Today&apos;s Memory</h2>
         </div>
 
-        <div className="template-selector">
+        <div className="template-selector upgraded-template-selector">
           {templates.map((t) => (
             <button
               key={t.id}
               type="button"
               className={form.template === t.id ? "template active" : "template"}
-              onClick={() => handleTemplateSelect(t.id)}
+              onClick={() => setForm({ ...form, template: t.id })}
             >
               <span>{t.emoji}</span>
-              {t.name}
+              <p>{t.name}</p>
             </button>
           ))}
         </div>
 
         <form onSubmit={handleSubmit}>
-          <input
-            className="diary-title-input"
-            name="title"
-            placeholder="Give this page a title..."
-            value={form.title}
-            onChange={handleChange}
-          />
-
-          <div className="diary-small-row">
-            <select name="mood" value={form.mood} onChange={handleChange}>
-              <option value="">Select Mood</option>
-              <option value="Happy">😊 Happy</option>
-              <option value="Sad">😢 Sad</option>
-              <option value="Calm">😌 Calm</option>
-              <option value="Angry">😡 Angry</option>
-              <option value="Excited">🤩 Excited</option>
-              <option value="Tired">😴 Tired</option>
-              <option value="Loved">😍 Loved</option>
-              <option value="Stressed">😰 Stressed</option>
-            </select>
-
+          <div className="diary-title-row">
+            <span>Title:</span>
             <input
-              name="tags"
-              placeholder="Tags: college, memory..."
-              value={form.tags}
+              name="title"
+              placeholder="Give this page a title..."
+              value={form.title}
               onChange={handleChange}
             />
           </div>
 
+          <div className="mood-chip-box">
+            {moods.map((m) => (
+              <button
+                type="button"
+                key={m.value}
+                className={form.mood === m.value ? "mood-chip selected" : "mood-chip"}
+                onClick={() => setForm({ ...form, mood: m.value })}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+
+          <input
+            className="tags-input"
+            name="tags"
+            placeholder="Tags: college, memory, family..."
+            value={form.tags}
+            onChange={handleChange}
+          />
+
           <textarea
-            className="diary-content-input"
+            className="diary-content-input upgraded-content"
             name="content"
             placeholder="Dear Diary..."
             value={form.content}
             onChange={handleChange}
           />
 
-          <div className="diary-lock-area">
+          <div className="signature-box">
+            <span>Signature:</span>
+            <input
+              name="signature"
+              placeholder="Your name or sign..."
+              value={form.signature}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="secret-lock-box">
             <label>
               <input
                 type="checkbox"
@@ -140,14 +170,17 @@ export default function DiaryForm({ onClose, refresh }) {
                 checked={form.is_locked}
                 onChange={handleChange}
               />
-              Lock this page with password 🔐
+              <div>
+                <strong>🔐 Keep this page secret</strong>
+                <p>Lock this diary page with a password.</p>
+              </div>
             </label>
 
             {form.is_locked && (
               <input
                 type="password"
                 name="entry_password"
-                placeholder="Set diary page password"
+                placeholder="Set secret password"
                 value={form.entry_password}
                 onChange={handleChange}
               />

@@ -21,7 +21,7 @@ export default function LockedPages() {
   }, []);
 
   return (
-    <div className="locked-pages-screen">
+    <div className="page-container locked-theme">
       <div className="locked-pages-header">
         <button onClick={() => navigate("/dashboard")}>← Dashboard</button>
         <h1>🔐 Locked Diary Pages</h1>

@@ -12,6 +12,7 @@ import Favorites from "./pages/Favorites.jsx";
 import LockedPages from "./pages/LockedPages.jsx";
 import DiaryPages from "./pages/DiaryPages.jsx";
 import MoodAnalytics from "./pages/MoodAnalytics.jsx";
+import MoodExplore from "./pages/MoodExplore.jsx";
 
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
@@ -90,6 +91,14 @@ function App() {
           element={
             <ProtectedRoute>
               <DiaryPages />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mood-explore"
+          element={
+            <ProtectedRoute>
+              <MoodExplore />
             </ProtectedRoute>
           }
         />
